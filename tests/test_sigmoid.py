@@ -4,7 +4,7 @@ from unittest.mock import patch, MagicMock
 
 from scipy.optimize import OptimizeWarning
 
-from sigmoid import Sigmoid
+from sigmoidal import Sigmoid
 
 
 class SigmoidTestCase(TestCase):
