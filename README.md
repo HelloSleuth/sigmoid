@@ -19,4 +19,4 @@ Sigmoidal is intended to work like the [Numpy Polynomial](https://numpy.org/doc/
 * `python setup.py sdist bdist_wheel`
 
 ## Deploying
-* `twine upload --repository-url https://upload.pypi.org/legacy/ dist/*`
+* `twine upload --skip-existing --repository-url https://upload.pypi.org/legacy/ dist/*`
