@@ -95,8 +95,34 @@ class Sigmoid:
             return None  # no root
 
     @staticmethod
+    def _positive_scaled_sigmoid(x, L):
+        return L / (1 + np.exp(-x))
+
+    @staticmethod
+    def _negative_scaled_sigmoid(x, L):
+        e_ = np.exp(x)
+        return (L * e_) / (1 + e_)
+
+    @staticmethod
     def _sigmoid(x, L, x0, k, b):
-        y = L / (1 + np.exp(-k*(x-x0))) + b
+        x_ = k * (x - x0)
+
+        if isinstance(x_, np.ndarray):
+            positive_mask = x_ >= 0
+            negative_mask = ~positive_mask
+
+            y = np.empty_like(x_, dtype=np.float64)
+            y[positive_mask] = Sigmoid._positive_scaled_sigmoid(x_[positive_mask], L)
+            y[negative_mask] = Sigmoid._negative_scaled_sigmoid(x_[negative_mask], L)
+        else:
+            if x_ >= 0:
+                y = Sigmoid._positive_scaled_sigmoid(x_, L)
+            else:
+                y = Sigmoid._negative_scaled_sigmoid(x_, L)
+        y = y + b
+
+        # naive implementation
+        # y = L / (1 + np.exp(-k*(x-x0))) + b
         return y
 
     @staticmethod
