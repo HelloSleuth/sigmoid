@@ -1,3 +1,5 @@
+import warnings
+
 import numpy as np
 from unittest import TestCase
 from unittest.mock import patch, MagicMock
@@ -48,6 +50,22 @@ class SigmoidTestCase(TestCase):
         self.assertAlmostEqual(0.2689414213699951, sig(-1))
         self.assertAlmostEqual(1.0, sig(20))
         self.assertAlmostEqual(0.0, sig(-20))
+
+    # test default sigmoid overflow
+    def test_default_sigmoid_overflow(self):
+        warnings.filterwarnings('error')
+        sig = Sigmoid()
+        try:
+            y = sig(-1000)
+            y = sig(np.array([10, -1000]))
+            for sign in (-1, 1):
+                for p in range(100):
+                    x = (sign * 10) ** p
+                    y = sig(x)
+        except RuntimeWarning as e:
+            self.fail(e)
+        finally:
+            warnings.resetwarnings()
 
     # test __call__ evaluates sigmoid correctly (and works with numpy arrays in/out)
     def test_evaluating_parameterized_sigmoid_from_numpy_array(self):
