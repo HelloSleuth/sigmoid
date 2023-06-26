@@ -67,6 +67,20 @@ class SigmoidTestCase(TestCase):
         finally:
             warnings.resetwarnings()
 
+    # test derivative 1 overflow
+    def test_deriv1_overflow(self):
+        warnings.filterwarnings('error')
+        sig = Sigmoid(L=-0.28, x0=6.96, k=255.41, b=0.88)
+        x_vals = [0.05, 4.15]
+        derivative_of_sig = sig.deriv()
+        try:
+            for x in x_vals:
+                actual = derivative_of_sig(x)
+        except RuntimeWarning as e:
+            self.fail(e)
+        finally:
+            warnings.resetwarnings()
+
     # test __call__ evaluates sigmoid correctly (and works with numpy arrays in/out)
     def test_evaluating_parameterized_sigmoid_from_numpy_array(self):
         sig = Sigmoid(0.36, 5, 1.5, -0.06)
@@ -252,7 +266,6 @@ class SigmoidTestCase(TestCase):
     def test_root_of_sigmoid(self):
         sig = Sigmoid(0.36, 5, 1.5, -0.06)
         roots = sig.roots()
-        print(roots)
         self.assertEqual(1, len(roots))
         self.assertAlmostEqual(3.9270413917106, roots[0])
 

@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name='Sigmoidal',
-    version='0.3.0',
+    version='0.4.0',
     author='Jade Glaze, Sleuth',
     author_email='jade@hellosleuth.com',
     url='https://github.com/HelloSleuth/sigmoid',

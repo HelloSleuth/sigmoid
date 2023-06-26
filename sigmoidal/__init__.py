@@ -105,30 +105,12 @@ class Sigmoid:
 
     @staticmethod
     def _sigmoid(x, L, x0, k, b):
-        x_ = k * (x - x0)
-
-        if isinstance(x_, np.ndarray):
-            positive_mask = x_ >= 0
-            negative_mask = ~positive_mask
-
-            y = np.empty_like(x_, dtype=np.float64)
-            y[positive_mask] = Sigmoid._positive_scaled_sigmoid(x_[positive_mask], L)
-            y[negative_mask] = Sigmoid._negative_scaled_sigmoid(x_[negative_mask], L)
-        else:
-            if x_ >= 0:
-                y = Sigmoid._positive_scaled_sigmoid(x_, L)
-            else:
-                y = Sigmoid._negative_scaled_sigmoid(x_, L)
-        y = y + b
-
-        # naive implementation
-        # y = L / (1 + np.exp(-k*(x-x0))) + b
-        return y
+        return L * scipy.special.expit(k * (x - x0)) + b
 
     @staticmethod
     def _derivative_1(x, L, x0, k, *args):
-        e_ = np.exp(-k*(x-x0))
-        y = (k*L*e_)/((1+e_)**2)
+        E = scipy.special.expit(k * (x - x0))
+        y = k * L * E * (1 - E)
         return y
 
     @staticmethod
